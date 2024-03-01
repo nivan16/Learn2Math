@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === 'production') {
   // })
 
   // Serve the static assets in the frontend's build folder
-  app.use(express.static(path.resolve("../frontend/build")));
+  app.use(express.static(path.resolve("frontend/build")));
   app.use(cors());
 
   app.get("/", (req, res) => {
@@ -31,7 +31,7 @@ if (process.env.NODE_ENV === 'production') {
    // Serve the frontend's index.html file at all other routes NOT starting with /api
    app.get(/^(?!\/?api).*/, (req, res) => {
     res.sendFile(
-      path.resolve(__dirname, '../frontend', 'build', 'index.html')
+      path.resolve(__dirname, 'frontend', 'build', 'index.html')
     );
   });
 
