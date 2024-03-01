@@ -6,6 +6,7 @@ const db = require('./config/keys').mongoURI;
 const users = require("./routes/api/users");
 const bodyParser = require('body-parser');
 const path = require('path');
+const cors = require('cors');
 const lessons = require("./routes/api/lessons");
 const flashcards = require("./routes/api/flashcards");
 const questions = require("./routes/api/questions");
@@ -18,25 +19,14 @@ if (process.env.NODE_ENV === 'production') {
   // app.get('/', (req, res) => {
   //   res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
   // })
-  const path = require('path');
-  // Serve the frontend's index.html file at the root route
-  app.get('/', (req, res) => {
-    res.cookie('CSRF-TOKEN', req.csrfToken());
-    res.sendFile(
-      path.resolve(__dirname, '../frontend', 'build', 'index.html')
-    );
-  });
 
   // Serve the static assets in the frontend's build folder
   app.use(express.static(path.resolve("../frontend/build")));
+  app.use(cors());
 
-  // Serve the frontend's index.html file at all other routes NOT starting with /api
-  app.get(/^(?!\/?api).*/, (req, res) => {
-    res.cookie('CSRF-TOKEN', req.csrfToken());
-    res.sendFile(
-      path.resolve(__dirname, '../frontend', 'build', 'index.html')
-    );
-  });
+  app.get("/", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"));
+  })
 }
 
 mongoose
@@ -49,6 +39,9 @@ app.use(bodyParser.json());
 
 app.use(passport.initialize());
 require('./config/passport')(passport);
+
+//CORS
+app.use(cors())
 
 app.get("/", (req, res) => res.send("Using Nodemon"));
 
